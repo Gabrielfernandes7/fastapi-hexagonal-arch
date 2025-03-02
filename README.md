@@ -1,39 +1,68 @@
-# Arquitetura Hexagonal
+# Arquitetura Hexagonal no FastAPI
 
-Objetivos: os objetivos dessa arquitetura é separar regras de negócio das dependências externas,
-tornando o sistema mais modular, testável e flexível.
+Este projeto implementa a **Arquitetura Hexagonal** com **FastAPI**, separando claramente **regras de negócio** de **dependências externas**. Isso torna o sistema **modular, testável e flexível**.
 
-Ports: interfaces que definem como o domínio se comunica com o mundo externo
+---
 
-Adapter: são as implementações dessas interfaces
+## 🔥 **Objetivo da Arquitetura Hexagonal**
+A Arquitetura Hexagonal (Ports & Adapters) busca desacoplar as regras de negócio das tecnologias externas, permitindo:
 
-📌 Por que usar a Arquitetura Hexagonal?
+✅ **Modularidade** → Separação clara entre domínio e infraestrutura  
+✅ **Testabilidade** → Facilidade para criar testes unitários e mocks  
+✅ **Flexibilidade** → Possibilidade de trocar banco de dados, APIs externas ou interface de usuário sem afetar o núcleo do sistema  
 
-    Desacoplamento: A lógica de negócio não depende diretamente de frameworks, bancos de dados ou APIs externas.
+---
 
-    Testabilidade: Como a lógica está isolada, fica mais fácil criar testes unitários e mocks para dependências externas.
+## 🚀 **Conceitos da Arquitetura Hexagonal**
+A arquitetura se baseia em dois conceitos principais:
 
-    Flexibilidade: Você pode mudar a camada de persistência (banco de dados) ou a interface de entrada (HTTP, CLI, eventos) sem impactar a lógica principal.
+### 🔹 **Ports (Portas)**
+Interfaces que definem **como** o domínio se comunica com o mundo externo. Elas garantem que as regras de negócio permaneçam independentes da implementação concreta.
 
-## Estrutura do projeto
+- **Exemplo:** `order_repository.py` define uma interface para persistência de pedidos.
+
+### 🔸 **Adapters (Adaptadores)**
+São as implementações concretas das **Ports**. Eles traduzem chamadas externas para o formato esperado pelo domínio.
+
+- **Exemplo:** `order_repository_concrete.py` implementa a interface e salva pedidos no banco de dados.
+
+---
+
+## 📂 **Estrutura do Projeto**
 
 ```
-/seu_projeto
-│── app/
-│   │── core/                # Regras de negócio (Aplicação)
-│   │   ├── services/        # Casos de uso (regras de negócio)
-│   │   ├── models/          # Modelos de entidades (domain models)
-│   │   ├── repositories/    # Interfaces dos repositórios
-│   │── infrastructure/      # Implementações das interfaces
-│   │   ├── db/              # Conexões com banco de dados
-│   │   ├── repositories/    # Repositórios concretos (implementações)
-│   │   ├── external_apis/   # Comunicação com APIs externas
-│   │── adapters/            # Adaptadores (Entrada e Saída)
-│   │   ├── api/             # Controllers e Rotas FastAPI
-│   │   ├── cli/             # Interface via terminal
-│   │── config.py            # Configurações do projeto
-│   │── main.py              # Ponto de entrada da aplicação
-│── tests/                   # Testes unitários e de integração
+├── app
+│   ├── adapter
+│   │   ├── controller
+│   │   │   ├── __init__.py
+│   │   │   └── order_controller.py
+│   │   ├── dto
+│   │   │   ├── __init__.py
+│   │   │   └── order_schema.py
+│   │   └── __init__.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── model
+│   │   │   ├── __init__.py
+│   │   │   └── order.py
+│   │   ├── repository
+│   │   │   ├── __init__.py
+│   │   │   └── order_repository.py
+│   │   └── service
+│   │       ├── __init__.py
+│   │       └── order_service.py
+│   ├── infra
+│   │   ├── db
+│   │   │   ├── database.py
+│   │   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── repository_concrete
+│   │       ├── __init__.py
+│   │       └── order_repository_concrete.py
+│   ├── __init_.py
+│   ├── __init__.py
+│   └── main.py
+├── README.md
+└── tests
 │── requirements.txt         # Dependências do projeto
-│── Dockerfile               # Arquivo Docker para containerização
 ```
