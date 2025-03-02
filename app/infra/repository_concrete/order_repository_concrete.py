@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.core.repository.order_repository import OrderRepository
 from app.core.model.order import Order
-from app.infra.db.database import Base, SessionLocal, engine
+from app.infra.db.database import Base, engine
 
 from sqlalchemy import Column, Integer, String, Float, DateTime
 
